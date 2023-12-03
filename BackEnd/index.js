@@ -1,20 +1,20 @@
 const express = require("express");
-const mongoose = require("mongoose");
-const connectDB = require("./db");
-const dotenv = require("dotenv");
 const app = express();
+const dotenv = require("dotenv");
 dotenv.config();
+const connectDB = require("./db");
 const PORT = process.env.PORT || 5000;
 
 connectDB();
 
-mongoose.connection.once("open", () => {
-  console.log("MongoDB Connected");
-  app.listen(PORT, () => {
-    console.log(`App listening on port ${PORT}`);
-  });
+app.get("/", (req, res) => {
+  res.send("Hello World !");
 });
 
-mongoose.connection.on('error', err =>{
-  console.log(err);
-})
+app.use(express.json());
+
+app.use("/api", require("./routes/createUser"));
+
+app.listen(PORT, () => {
+  console.log(`App listening on port ${PORT}`);
+});
